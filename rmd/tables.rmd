@@ -1,0 +1,54 @@
+--- 
+title: "GLASS report tables" 
+author: "Philippe Glaziou" 
+date: "`r Sys.Date()`" 
+output:  
+  html_fragment: 
+    # Don’t include a table of contents 
+    toc: no 
+    # Set standard figure width to 12 inches 
+    fig_width: 12 
+    # Don’t write figure captions 
+    fig_caption: FALSE 
+--- 
+
+```{r setup, include=FALSE}
+# Set options, load data, utility functions
+
+knitr::opts_chunk$set(
+  echo = FALSE,
+  results = "asis",
+  message = FALSE,
+  warning = FALSE
+)
+
+
+library(data.table)
+library(here)
+
+```
+
+
+# GLASS report - Tables
+
+## Table 1. Number of country-year data reports
+
+```{r tab_2.1.1}
+out1 <- gfreq[, .N, by=.(iso3,year)][, .N, by=year]
+out2 <- gprop[, .N, by=.(iso3,year)][, .N, by=year]
+dp <- merge(out1, out2, by='year')
+dp[, total := N.x + N.y]
+dp[, N.x := NULL]
+dp[, N.y := NULL]
+setnames(dp, c('Year','Total'))
+
+knitr::kable(dp)
+
+```
+
+Note: if exact numbers do not need to be shown, this table could be changed into a time-series figure
+
+
+
+
+

@@ -28,3 +28,5 @@
 
 
 ## List of tables and figures
+
+1. Number of country-year data reports (see html/tables.html)

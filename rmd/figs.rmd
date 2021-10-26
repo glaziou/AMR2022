@@ -63,3 +63,4 @@ p2 <- whomap(out19, map.title='Reported data points in 2019', legend.title = 'Re
 mp <- grid.arrange(p1, p2, ncol=2)
 
 ```
+Note: the number of country data points is defined as the aggregated number of reported results for the year over all  specimen-pathogen-antibiotic combinations.

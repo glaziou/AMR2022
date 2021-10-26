@@ -46,8 +46,8 @@ load(here('data/gimp.rda'))
 out18a <- gfreq[year==2018, .(tota=sum(tot, na.rm=TRUE)), by=iso3]
 out19a <- gfreq[year==2019, .(tota=sum(tot, na.rm=TRUE)), by=iso3]
 
-out18b <- gprop[year==2018, .(totb=sum(tot, na.rm=TRUE)), by=iso3]
-out19b <- gprop[year==2019, .(totb=sum(tot, na.rm=TRUE)), by=iso3]
+out18b <- gprop[year==2018, .(totb=sum(ast, na.rm=TRUE)), by=iso3]
+out19b <- gprop[year==2019, .(totb=sum(ast, na.rm=TRUE)), by=iso3]
 
 out18 <- merge(out18a, out18b, by='iso3', all.x=T, all.y=T)
 out19 <- merge(out19a, out19b, by='iso3', all.x=T, all.y=T)

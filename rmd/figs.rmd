@@ -59,6 +59,7 @@ out19[, var := cut(tot, breaks=c(0,1,5,10,50,100,+Inf))]
 
 p1 <- whomap(out18, map.title='Reported data points in 2018', legend.title = 'Reported data points\n(Thousand)')
 p2 <- whomap(out19, map.title='Reported data points in 2019', legend.title = 'Reported data points\n(Thousand)')
+
 mp <- grid.arrange(p1, p2, ncol=2)
 
 ```

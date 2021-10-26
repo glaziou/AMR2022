@@ -43,8 +43,8 @@ load(here('data/gimp.rda'))
 
 ## Fig 1. Volume of AMR data reported by countries in 2018 and 2019
 ```{r echo=FALSE, message=FALSE, warning=FALSE, results = "asis", dev = 'png', fig.width=16, fig_1, fig.alt="Number of reported data points (Thousand), 2018-2019"} 
-out18a <- gfreq[year==2018, .(tota=sum(tot, na.rm=TRUE)), by=iso3]
-out19a <- gfreq[year==2019, .(tota=sum(tot, na.rm=TRUE)), by=iso3]
+out18a <- gfreq[year==2018, .(tota=sum(ast, na.rm=TRUE)), by=iso3]
+out19a <- gfreq[year==2019, .(tota=sum(ast, na.rm=TRUE)), by=iso3]
 
 out18b <- gprop[year==2018, .(totb=sum(ast, na.rm=TRUE)), by=iso3]
 out19b <- gprop[year==2019, .(totb=sum(ast, na.rm=TRUE)), by=iso3]
@@ -54,8 +54,8 @@ out19 <- merge(out19a, out19b, by='iso3', all.x=T, all.y=T)
 
 out18[, tot := rowSums(cbind(tota, totb), na.rm=TRUE)/1000]
 out19[, tot := rowSums(cbind(tota, totb), na.rm=TRUE)/1000]
-out18[, var := cut(tot, breaks=c(0,1,5,10,50,100,+Inf))]
-out19[, var := cut(tot, breaks=c(0,1,5,10,50,100,+Inf))]
+out18[, var := cut(tot, breaks=c(0,1,10,50,100,+Inf))]
+out19[, var := cut(tot, breaks=c(0,1,10,50,100,+Inf))]
 
 p1 <- whomap(out18, map.title='Reported data points in 2018', legend.title = 'Reported data points\n(Thousand)')
 p2 <- whomap(out19, map.title='Reported data points in 2019', legend.title = 'Reported data points\n(Thousand)')

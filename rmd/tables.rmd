@@ -26,6 +26,10 @@ knitr::opts_chunk$set(
 library(data.table)
 library(here)
 
+load(here('data/gfreq.rda'))
+load(here('data/gprop.rda'))
+load(here('data/gimp.rda'))
+
 ```
 
 

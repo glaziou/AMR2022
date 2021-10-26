@@ -29,4 +29,7 @@
 
 ## List of tables and figures
 
-1. Number of country-year data reports (see html/tables.html)
+Table 1. Number of country-year data reports (see html/tables.html)
+Fig 1. Volume of AMR data reported by countries in 2018 and 2019
+
+... to be continued

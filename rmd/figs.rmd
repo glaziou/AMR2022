@@ -69,7 +69,7 @@ Note: the number of country data points is defined as the aggregated number of r
 
 
 ## Fig 2. Resistance prevalence over time, by sample type and pathogen
-```{r echo=FALSE, message=FALSE, warning=FALSE, results = "asis", dev = 'png', fig.width=16, fig_1, fig.alt="Number of reported data points (Thousand), 2018-2019"} 
+```{r echo=FALSE, message=FALSE, warning=FALSE, results = "asis", dev = 'png', fig.width=16, fig_2, fig.alt="Number of reported data points (Thousand), 2018-2019"} 
 gfreq[, p.res := res/ast]
 glass <-
   merge(gfreq[, .(
@@ -94,29 +94,56 @@ glass <-
                 p.res)],
   by = c("iso3", "year", "specimen", "pathogen", "antibiotic","tot","p.res"), all=T)
 
-
-
-spec <- 'BLOOD'
-path <- 'ESCCOL'
-ab <- 'J01DD'
 ylo <- 2015
 yhi <- 2019
-sel <- glass$specimen==spec & glass$pathogen==path & glass$antibiotic==ab & glass$year>=ylo
-nobs <- sum(sel)
-fit <- loess(p.res ~ year, data=glass[sel])
-out <- data.table(year=ylo:yhi, iso3='', yhat=predict(fit, newdata=data.table(year=ylo:yhi)))
 
-qplot(year, p.res, data=glass[sel], group=iso3, geom='line', colour=I('grey40'), 
-            main='BSI caused by E. coli resistant to 3rd generation cephalosporins ') +
-  geom_point(size=I(.5), colour=I('grey40')) +
-  geom_line(aes(year, yhat), data=out, size=I(2)) +
-  scale_y_continuous(name='Resistance (%)') +
-  scale_x_continuous(breaks=ylo:yhi) +
-  xlab('') +
-  theme_bw(base_size = 18)
-
-
-
+for (i in unique(glass$specimen))
+  for (j in unique(glass$pathogen))
+    for (k in unique(glass$antibiotic)) {
+      spec <- i
+      path <- j
+      ab <- k
+      sel <-
+        glass$specimen == spec &
+        glass$pathogen == path &
+        glass$antibiotic == ab & glass$year >= ylo
+      nobs <- sum(sel)
+      
+      if (nobs > 100) {
+        fit <- loess(p.res ~ year, data = glass[sel])
+        out <-
+          data.table(
+            year = ylo:yhi,
+            iso3 = '',
+            yhat = predict(fit, newdata = data.table(year = ylo:yhi))
+          )
+        
+        p <- qplot(
+          year,
+          p.res,
+          data = glass[sel],
+          group = iso3,
+          geom = 'line',
+          colour = I('grey40'),
+          main = paste0(spec, ' infections caused by ', path, " resistant to ", ab)
+        ) +
+          geom_point(size = I(.5), colour = I('grey40')) +
+          geom_line(aes(year, yhat), data = out, size = I(2)) +
+          scale_y_continuous(name = 'Resistance (%)') +
+          scale_x_continuous(breaks = ylo:yhi) +
+          xlab('') +
+          theme_bw(base_size = 18)
+        ggsave(
+          p,
+          file = here(paste0(
+            'png/tseries_', spec, '_', path, '_', ab, '.png'
+          )),
+          width = 12,
+          height = 8,
+          device = 'png'
+        )
+      }
+    }
 
 ```
 

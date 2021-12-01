@@ -64,3 +64,63 @@ mp <- grid.arrange(p1, p2, ncol=2)
 
 ```
 Note: the number of country data points is defined as the aggregated number of reported results for the year over all  specimen-pathogen-antibiotic combinations.
+
+
+
+
+## Fig 2. Resistance prevalence over time, by sample type and pathogen
+```{r echo=FALSE, message=FALSE, warning=FALSE, results = "asis", dev = 'png', fig.width=16, fig_1, fig.alt="Number of reported data points (Thousand), 2018-2019"} 
+gfreq[, p.res := res/ast]
+glass <-
+  merge(gfreq[, .(
+    iso3,
+    year,
+    specimen,
+    pathogen,
+    antibiotic,
+    antibiotic.label2,
+    origin,
+    n = numsampledpatients,
+    tot,
+    p.res
+  )], gprop[, .(iso3,
+                year,
+                specimen,
+                pathogen,
+                antibiotic,
+                path.label,
+                antibiotic.label,
+                tot,
+                p.res)],
+  by = c("iso3", "year", "specimen", "pathogen", "antibiotic","tot","p.res"), all=T)
+
+
+
+spec <- 'BLOOD'
+path <- 'ESCCOL'
+ab <- 'J01DD'
+ylo <- 2015
+yhi <- 2019
+sel <- glass$specimen==spec & glass$pathogen==path & glass$antibiotic==ab & glass$year>=ylo
+nobs <- sum(sel)
+fit <- loess(p.res ~ year, data=glass[sel])
+out <- data.table(year=ylo:yhi, iso3='', yhat=predict(fit, newdata=data.table(year=ylo:yhi)))
+
+qplot(year, p.res, data=glass[sel], group=iso3, geom='line', colour=I('grey40'), 
+            main='BSI caused by E. coli resistant to 3rd generation cephalosporins ') +
+  geom_point(size=I(.5), colour=I('grey40')) +
+  geom_line(aes(year, yhat), data=out, size=I(2)) +
+  scale_y_continuous(name='Resistance (%)') +
+  scale_x_continuous(breaks=ylo:yhi) +
+  xlab('') +
+  theme_bw(base_size = 18)
+
+
+
+
+```
+
+
+
+
+

@@ -26,6 +26,9 @@
 * ~/rmd
   Rmarkdown scripts
 
+* ~/png
+  Figures in png format
+
 
 ## List of tables and figures
 
